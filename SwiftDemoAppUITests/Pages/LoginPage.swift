@@ -30,7 +30,7 @@ class LoginPage {
         return self
     }
     
-    @discardableResult func login(username: String, password: String) {
+    func login(username: String, password: String) {
         enterUsername(username)
         enterPassword(password)
         tapLogin()
