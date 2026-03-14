@@ -1,41 +1,128 @@
-//
-//  SwiftDemoAppUITests.swift
-//  SwiftDemoAppUITests
-//
-//  Created by Vedant Pant on 14/03/26.
-//
-
 import XCTest
 
-final class SwiftDemoAppUITests: XCTestCase {
-
+@MainActor
+class SwiftDemoAppUITests: XCTestCase {
+    
+    var app: XCUIApplication!
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
+        app = XCUIApplication()
         app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    }
+    
+    override func tearDownWithError() throws {
+        app.terminate()
+        app = nil
+    }
+    
+    func testValidLogin() {
+        let userNameField = app.textFields["username-field"]
+        let passwordField = app.secureTextFields["password-field"]
+        let loginButton = app.buttons["login-button"]
+        
+        XCTAssertTrue(userNameField.waitForExistence(timeout: 5))
+        userNameField.tap()
+        userNameField.typeText("ash")
+        
+        passwordField.tap()
+        passwordField.typeText("pikachu")
+        
+        loginButton.tap()
+        
+        let searchTitle = app.staticTexts["search-title"]
+        XCTAssertTrue(searchTitle.waitForExistence(timeout: 5), "should navigate to search screen after valid login")
+    }
+    
+    func testInvalidLogin() {
+        let userNameField = app.textFields["username-field"]
+        let passwordField = app.secureTextFields["password-field"]
+        let loginButton = app.buttons["login-button"]
+        
+        let errorLabel = app.staticTexts["error-label"]
+        
+        XCTAssertTrue(userNameField.waitForExistence(timeout: 5))
+        userNameField.tap()
+        userNameField.typeText("wrongUser")
+        
+        passwordField.tap()
+        passwordField.typeText("wrongpassword")
+        
+        loginButton.tap()
+    
+        sleep(2)
+        XCTAssertTrue(errorLabel.waitForExistence(timeout: 5))
+        XCTAssertEqual(errorLabel.label, "Invalid trainer Credentials")
+    }
+    
+    func testEmptyLoginShowsError() {
+        
+        let loginButton = app.buttons["login-button"]
+        
+        let errorLabel = app.staticTexts["error-label"]
+        
+        loginButton.tap()
+        
+        XCTAssertTrue(errorLabel.waitForExistence(timeout: 5))
+        XCTAssertEqual(errorLabel.label, "Invalid trainer Credentials")
+    }
+    
+    func testSearchPokemon() {
+        let userNameField = app.textFields["username-field"]
+        let passwordField = app.secureTextFields["password-field"]
+        let loginButton = app.buttons["login-button"]
+        let searchButton = app.buttons["search-button"]
+        
+        XCTAssertTrue(userNameField.waitForExistence(timeout: 5))
+        userNameField.tap()
+        userNameField.typeText("ash")
+        
+        passwordField.tap()
+        passwordField.typeText("pikachu")
+        
+        loginButton.tap()
+        
+        let searchBar = app.textFields["search-field"]
+        
+        XCTAssertTrue(searchBar.waitForExistence(timeout: 5))
+        searchBar.tap()
+        searchBar.typeText("pikachu")
+        searchButton.tap()
+        
+        let resultLabel = app.staticTexts["result-label"]
+        
+        XCTAssertTrue(resultLabel.waitForExistence(timeout: 10))
+        XCTAssertTrue(resultLabel.label.contains("Pikachu"))
+        
+    }
+    
+    func testInvalidPokemon() {
+        let userNameField = app.textFields["username-field"]
+        let passwordField = app.secureTextFields["password-field"]
+        let loginButton = app.buttons["login-button"]
+        let searchButton = app.buttons["search-button"]
+        
+        XCTAssertTrue(userNameField.waitForExistence(timeout: 5))
+        userNameField.tap()
+        userNameField.typeText("ash")
+        
+        passwordField.tap()
+        passwordField.typeText("pikachu")
+        
+        loginButton.tap()
+        
+        let searchBar = app.textFields["search-field"]
+        
+        XCTAssertTrue(searchBar.waitForExistence(timeout: 5))
+        searchBar.tap()
+        searchBar.typeText("xyzabc123")
+        searchButton.tap()
+        
+        let resultLabel = app.staticTexts["result-label"]
+        
+        XCTAssertTrue(resultLabel.waitForExistence(timeout: 10))
+        XCTAssertTrue(resultLabel.label.contains("not found!"))
+        
     }
 
-    @MainActor
-    func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
-        measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
-        }
-    }
 }
