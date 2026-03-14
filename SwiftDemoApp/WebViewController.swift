@@ -49,7 +49,7 @@ class WebViewController: UIViewController {
     // MARK: - Load
     func loadPage() {
         activityIndicator.startAnimating()
-        if let url = URL(string: "https://pokeapi.co/docs/v2") {
+        if let url = URL(string: "https://pokeapi.co") {
             let request = URLRequest(url: url)
             webView.load(request)
         }
