@@ -8,6 +8,8 @@ class SwiftDemoAppUITests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = XCUIApplication()
+        app.launchArguments = ["--uitesting"]
+        app.launchEnvironment = ["ENV": "test"]
         app.launch()
     }
     
