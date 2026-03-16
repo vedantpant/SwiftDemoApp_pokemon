@@ -44,6 +44,9 @@ class WebViewController: UIViewController {
         ])
 
         webView.navigationDelegate = self
+        if #available(iOS 16.4, *) {
+            webView.isInspectable = true
+        }
     }
 
     // MARK: - Load
