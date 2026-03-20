@@ -49,9 +49,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          cd AppiumTests
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Install Appium
         run: |
@@ -66,7 +64,7 @@ jobs:
 
       - name: Run Appium tests
         run: |
-          cd AppiumTests
+          mkdir -p reports
           pytest tests/ -v --html=reports/appium_report.html
 
       - name: Upload HTML report
@@ -74,4 +72,4 @@ jobs:
         if: always()
         with:
           name: appium-report
-          path: AppiumTests/reports/
+          path: reports/
