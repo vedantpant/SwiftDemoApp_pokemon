@@ -21,7 +21,7 @@ jobs:
       - name: Run XCUITests
         run: |
           xcodebuild test \
-            -project SwiftDemoApp/SwiftDemoApp.xcodeproj \
+            -project SwiftDemoApp.xcodeproj \
             -scheme SwiftDemoApp \
             -destination 'platform=iOS Simulator,name=iPhone 16' \
             -resultBundlePath TestResults.xcresult \
