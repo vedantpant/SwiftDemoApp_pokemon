@@ -29,7 +29,7 @@ jobs:
             | xcpretty || true
 
       - name: Upload xcresult
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: xcresult
@@ -70,7 +70,7 @@ jobs:
           pytest tests/ -v --html=reports/appium_report.html
 
       - name: Upload HTML report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: appium-report
